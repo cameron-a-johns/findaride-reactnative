@@ -5,6 +5,8 @@
   "scripts": {
     "start": "react-native run-android",
     "release": "react-native run-android --variant=release",
+    "clean-android": "cd android && gradlew clean",
+    "clean-ios": "cd ios && xcodebuild clean",
     "test": "jest"
   },
   "dependencies": {
