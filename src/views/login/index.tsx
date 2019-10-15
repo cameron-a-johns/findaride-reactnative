@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, Text} from 'react-native';
-import {LoginButton} from 'react-native-fbsdk';
+import {LoginButton, AccessToken} from 'react-native-fbsdk';
 
 export const LoginView: React.FC = () => {
   return (
@@ -8,20 +8,19 @@ export const LoginView: React.FC = () => {
       <View>
         <Text>Login</Text>
         <LoginButton
-          publishPermissions={['public_profile']}
+          permissions={['public_profile']}
           onLoginFinished={(error, result) => {
             if (error) {
-              alert('Login failed with error: ' + error.message);
+              console.log(`login has error: ${result.error}`);
             } else if (result.isCancelled) {
-              alert('Login was cancelled');
+              console.log('login is cancelled.');
             } else {
-              alert(
-                'Login was successful with permissions: ' +
-                  result.grantedPermissions,
-              );
+              AccessToken.getCurrentAccessToken().then(data => {
+                data && console.log(data.accessToken.toString());
+              });
             }
           }}
-          onLogoutFinished={() => alert('User logged out')}
+          onLogoutFinished={() => console.log('logout.')}
         />
       </View>
     </>
