@@ -49,5 +49,6 @@ public class MainApplication extends Application implements ReactApplication {
     // FacebookSdk.sdkInitialize(getApplicationContext());
     
     SoLoader.init(this, /* native exopackage */ false);
+    // FacebookSdk.sdkInitialize(getApplicationContext());
   }
 }

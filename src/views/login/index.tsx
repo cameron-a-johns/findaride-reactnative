@@ -9,19 +9,19 @@ export const LoginView: React.FC = () => {
       <View>
         <Text>Login</Text>
         <LoginButton
-          publishPermissions={['public_profile']}
+          permissions={['public_profile']}
           onLoginFinished={(error, result) => {
             console.log('login finished');
             if (error) {
-              alert('Login failed with error: ' + error.message);
+              console.log(`login has error: ${result.error}`);
             } else if (result.isCancelled) {
-              alert('Login was cancelled');
+              console.log('login is cancelled.');
             } else {
               console.log(result);
               alert('Login was successful with permissions: ' + result.grantedPermissions);
             }
           }}
-          onLogoutFinished={() => alert('User logged out')}
+          onLogoutFinished={() => console.log('logout.')}
         />
       </View>
     </>
