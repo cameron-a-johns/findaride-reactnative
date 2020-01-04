@@ -5,14 +5,13 @@
   "scripts": {
     "start": "react-native run-android",
     "release": "react-native run-android --variant=release",
-    "clean-android": "cd android && gradlew clean",
+    "clean-android": "cd android && ./gradlew clean",
     "clean-ios": "cd ios && xcodebuild clean",
     "test": "jest"
   },
   "dependencies": {
     "react": "16.8.6",
     "react-native": "0.60.5",
-    "react-native-app-auth": "^4.4.0",
     "react-native-fbsdk": "^1.0.4",
     "react-router-native": "^5.0.1"
   },
