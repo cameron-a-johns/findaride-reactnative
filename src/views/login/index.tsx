@@ -1,13 +1,27 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import { LoginButton } from 'react-native-fbsdk';
+
+const styles = StyleSheet.create({
+  wrapper: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  row: {
+    height: Dimensions.get('window').height / 2,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
 
 export const LoginView: React.FC = () => {
   return (
     <>
-      {console.log('test')}
-      <View>
-        <Text>Login</Text>
+      <View style={styles.wrapper}>
+        <View style={styles.row}>
+          <Text>Login</Text>
+        </View>
         <LoginButton
           permissions={['public_profile']}
           onLoginFinished={(error, result) => {
@@ -18,7 +32,7 @@ export const LoginView: React.FC = () => {
               console.log('login is cancelled.');
             } else {
               console.log(result);
-              alert('Login was successful with permissions: ' + result.grantedPermissions);
+              alert(`Login was successful with permissions: ${result.grantedPermissions}`);
             }
           }}
           onLogoutFinished={() => console.log('logout.')}
