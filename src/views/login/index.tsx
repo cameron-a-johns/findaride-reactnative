@@ -1,26 +1,37 @@
-import React from 'react';
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import React, { useContext } from 'react';
+import { View, Text, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import { LoginButton } from 'react-native-fbsdk';
-
-const styles = StyleSheet.create({
-  wrapper: {
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  row: {
-    height: Dimensions.get('window').height / 2,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
+import { Icon } from 'react-native-elements';
+import { ThemeContext } from '../../utilities/theme';
 
 export const LoginView: React.FC = () => {
+  const themeContext = useContext(ThemeContext);
+
+  const styles = StyleSheet.create({
+    wrapper: {
+      display: 'flex',
+      flexDirection: 'column',
+    },
+    row: {
+      height: Dimensions.get('window').height / 2,
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: themeContext?.colors.background,
+    },
+    login: {
+      color: themeContext?.colors.primary,
+    },
+  });
+
   return (
     <>
       <View style={styles.wrapper}>
         <View style={styles.row}>
-          <Text>Login</Text>
+          <Text style={styles.login}>Login</Text>
+          <TouchableOpacity onPress={() => themeContext?.swap() || console.log('void')}>
+            <Icon name="alarm" />
+          </TouchableOpacity>
         </View>
         <LoginButton
           permissions={['public_profile']}
