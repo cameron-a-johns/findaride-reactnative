@@ -1,11 +1,25 @@
 import React, { useContext } from 'react';
-import { View, Text, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
+import styled from 'styled-components';
+import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import { LoginButton } from 'react-native-fbsdk';
 import { Icon } from 'react-native-elements';
 import { ThemeContext } from '../../utilities/theme';
 
 export const LoginView: React.FC = () => {
   const themeContext = useContext(ThemeContext);
+
+  const Row = styled.view`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: ${themeContext?.colors.background};
+  `;
+
+  const HeaderWrapper = styled.view`
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  `;
 
   const styles = StyleSheet.create({
     wrapper: {
@@ -17,22 +31,30 @@ export const LoginView: React.FC = () => {
       flexDirection: 'row',
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: themeContext?.colors.background,
+    },
+    icon: {
+      height: 150,
     },
     login: {
       color: themeContext?.colors.primary,
+      textTransform: 'uppercase',
     },
   });
 
   return (
     <>
       <View style={styles.wrapper}>
-        <View style={styles.row}>
-          <Text style={styles.login}>Login</Text>
-          <TouchableOpacity onPress={() => themeContext?.swap() || console.log('void')}>
-            <Icon name="alarm" />
-          </TouchableOpacity>
-        </View>
+        <Row>
+          <HeaderWrapper>
+            <Icon
+              name="theme-light-dark"
+              type="material-community"
+              size={150}
+              onPress={() => themeContext?.swap() || console.log('woops')}
+            />
+            <Text style={styles.login}>Login</Text>
+          </HeaderWrapper>
+        </Row>
         <LoginButton
           permissions={['public_profile']}
           onLoginFinished={(error, result) => {

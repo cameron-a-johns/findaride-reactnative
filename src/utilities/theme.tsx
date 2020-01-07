@@ -7,13 +7,23 @@ interface Theme {
     link: string;
     background: string;
   };
+  sizing: {
+    base: number;
+  };
 }
 
 interface ThemeApi extends Theme {
   swap: () => void;
 }
 
+const ThemeBase = {
+  sizing: {
+    base: 16,
+  },
+};
+
 const Light: Theme = {
+  ...ThemeBase,
   colors: {
     primary: '#cf6e15',
     secondary: '#bbbbbb',
@@ -23,6 +33,7 @@ const Light: Theme = {
 };
 
 const Dark: Theme = {
+  ...ThemeBase,
   colors: {
     primary: '#eb7f1a',
     secondary: '#cccccc',

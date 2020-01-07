@@ -28,7 +28,8 @@
     "react-native-elements": "^1.2.7",
     "react-native-fbsdk": "^1.0.4",
     "react-native-vector-icons": "^6.6.0",
-    "react-router-native": "^5.0.1"
+    "react-router-native": "^5.0.1",
+    "styled-components": "^4.4.1"
   },
   "devDependencies": {
     "@babel/core": "^7.5.0",
@@ -39,6 +40,7 @@
     "@types/react-native": "^0.60.14",
     "@types/react-router-native": "^5.1.0",
     "@types/react-test-renderer": "^16.9.0",
+    "@types/styled-components": "^4.4.1",
     "babel-jest": "^24.1.0",
     "jest": "^24.1.0",
     "metro-react-native-babel-preset": "0.54.1",
