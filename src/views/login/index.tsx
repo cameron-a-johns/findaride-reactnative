@@ -1,21 +1,23 @@
-import React, { useContext } from 'react';
-import styled from 'styled-components';
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import React, { useContext, useState } from 'react';
+import styled from 'styled-components/native';
+import { View, Text, StyleSheet, Dimensions, Button } from 'react-native';
 import { LoginButton } from 'react-native-fbsdk';
 import { Icon } from 'react-native-elements';
-import { ThemeContext } from '../../utilities/theme';
+import { ThemeContext, RideApi, ApiContext } from '../../utilities';
 
 export const LoginView: React.FC = () => {
   const themeContext = useContext(ThemeContext);
+  const rideApi = new RideApi(useContext(ApiContext));
+  const [temp, setTemp] = useState('');
 
-  const Row = styled.view`
+  const Row = styled.View`
     display: flex;
     justify-content: center;
     align-items: center;
     background-color: ${themeContext?.colors.background};
   `;
 
-  const HeaderWrapper = styled.view`
+  const HeaderWrapper = styled.View`
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -46,14 +48,13 @@ export const LoginView: React.FC = () => {
       <View style={styles.wrapper}>
         <Row>
           <HeaderWrapper>
-            <Icon
-              name="theme-light-dark"
-              type="material-community"
-              size={150}
-              onPress={() => themeContext?.swap() || console.log('woops')}
-            />
+            <Icon name="theme-light-dark" type="material-community" size={150} onPress={() => themeContext?.swap()} />
             <Text style={styles.login}>Login</Text>
           </HeaderWrapper>
+          <Button
+            onPress={() => rideApi.getRidesForUser('rides/time').then(val => setTemp(val))}
+            title={temp || 'clickme'}
+          />
         </Row>
         <LoginButton
           permissions={['public_profile']}
