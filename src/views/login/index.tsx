@@ -3,7 +3,7 @@ import styled from 'styled-components/native';
 import { View, Text, StyleSheet, Dimensions, Button } from 'react-native';
 import { LoginButton } from 'react-native-fbsdk';
 import { Icon } from 'react-native-elements';
-import { ThemeContext, RideApi, ApiContext } from '../../utilities';
+import { ThemeContext, RideApi, ApiContext } from 'utilities';
 
 export const LoginView: React.FC = () => {
   const themeContext = useContext(ThemeContext);

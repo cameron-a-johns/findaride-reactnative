@@ -13,11 +13,19 @@ interface RequestConfig {
   data?: string;
 }
 
+interface AuthProvider {
+  getToken: () => Promise<string>;
+  getAppId: (clientId: string) => string;
+}
+
 export class ApiClient {
   private axiosClient: AxiosInstance;
 
-  constructor(env: keyof typeof URLMAP) {
+  private authProvider: AuthProvider;
+
+  constructor(env: keyof typeof URLMAP, authProvider: AuthProvider) {
     this.axiosClient = axios.create({ baseURL: URLMAP[env] });
+    this.authProvider = authProvider;
   }
 
   request = async <T>(path: string, config?: RequestConfig): Promise<T> => {
@@ -26,6 +34,20 @@ export class ApiClient {
         url: path,
         method: config?.method,
         headers: config?.headers,
+        data: config?.data,
+      });
+      return result.data;
+    } catch (e) {
+      throw new Error(e);
+    }
+  };
+
+  authenticatedRequest = async <T>(path: string, config?: RequestConfig): Promise<T> => {
+    try {
+      const result = await this.axiosClient.request<T>({
+        url: path,
+        method: config?.method,
+        headers: { ...config?.headers, Authorization: await this.authProvider.getToken() },
         data: config?.data,
       });
       return result.data;

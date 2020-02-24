@@ -4,28 +4,44 @@
     "project": "./tsconfig.json"
   },
   "root": true,
-  "extends": ["airbnb",
-  "plugin:@typescript-eslint/recommended",
-  "plugin:import/typescript",
-  "plugin:prettier/recommended",
-  "prettier/@typescript-eslint"],
+  "extends": [
+    "airbnb",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:import/typescript",
+    "plugin:prettier/recommended",
+    "prettier/@typescript-eslint"
+  ],
   "plugins": ["@typescript-eslint", "react-hooks", "jest"],
   "rules": {
     "import/prefer-default-export": "off",
-    "react/jsx-filename-extension": ["warn", {
-      "extensions": [".jsx", ".tsx"]
-    }],
+    "react/jsx-filename-extension": [
+      "warn",
+      {
+        "extensions": [".jsx", ".tsx"]
+      }
+    ],
     "@typescript-eslint/explicit-function-return-type": "off",
-    "no-unused-expressions": ["warn", {
-      "allowShortCircuit": true,
-      "allowTernary": true
-    }],
+    "no-unused-expressions": [
+      "warn",
+      {
+        "allowShortCircuit": true,
+        "allowTernary": true
+      }
+    ],
     "no-unused-vars": "off",
-    "@typescript-eslint/no-unused-vars": ["error", {
-      "argsIgnorePattern": "^_"
-    }]
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      {
+        "argsIgnorePattern": "^_"
+      }
+    ]
   },
   "globals": {
     "fetch": false
+  },
+  "settings": {
+    "import/resolver": {
+      "typescript": {}
+    }
   }
 }
