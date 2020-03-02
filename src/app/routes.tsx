@@ -2,10 +2,10 @@ import React from 'react';
 import { Switch, Route, NativeRouter } from 'react-router-native';
 import App from '../../App';
 import { LoginView } from '../views/login';
-import { ThemeProvider } from '../utilities/theme';
-import { ApiContext, ApiClient } from '../utilities/api';
+import { ThemeProvider, ApiContext, ApiClient, Auth } from '../utilities';
 
-const client = new ApiClient('dev');
+const authProvider = new Auth();
+const client = new ApiClient('dev', authProvider);
 
 export const routes = () => {
   return (
