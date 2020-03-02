@@ -1,5 +1,6 @@
 import React from 'react';
 import axios, { AxiosInstance } from 'axios';
+import { AuthProvider } from './auth';
 
 const URLMAP = {
   dev: 'http://192.168.1.141:4000/api/',
@@ -11,11 +12,6 @@ interface RequestConfig {
   method?: method;
   headers?: { [key: string]: string };
   data?: string;
-}
-
-interface AuthProvider {
-  getToken: () => Promise<string>;
-  getAppId: (clientId: string) => string;
 }
 
 export class ApiClient {
@@ -33,7 +29,7 @@ export class ApiClient {
       const result = await this.axiosClient.request<T>({
         url: path,
         method: config?.method,
-        headers: config?.headers,
+        headers: { ...config?.headers, 'x-api-key': await this.authProvider.getAppId() },
         data: config?.data,
       });
       return result.data;
@@ -47,7 +43,11 @@ export class ApiClient {
       const result = await this.axiosClient.request<T>({
         url: path,
         method: config?.method,
-        headers: { ...config?.headers, Authorization: await this.authProvider.getToken() },
+        headers: {
+          ...config?.headers,
+          Authorization: await this.authProvider.getToken(),
+          'x-api-key': await this.authProvider.getAppId(),
+        },
         data: config?.data,
       });
       return result.data;

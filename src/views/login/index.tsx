@@ -1,13 +1,14 @@
 import React, { useContext, useState } from 'react';
 import styled from 'styled-components/native';
 import { View, Text, StyleSheet, Dimensions, Button } from 'react-native';
-import { LoginButton } from 'react-native-fbsdk';
+import { LoginButton, AccessToken } from 'react-native-fbsdk';
 import { Icon } from 'react-native-elements';
-import { ThemeContext, RideApi, ApiContext } from 'utilities';
+import { ThemeContext, RideApi, ApiContext, UserApi } from '../../utilities';
 
 export const LoginView: React.FC = () => {
   const themeContext = useContext(ThemeContext);
   const rideApi = new RideApi(useContext(ApiContext));
+  const userApi = new UserApi(useContext(ApiContext));
   const [temp, setTemp] = useState('');
 
   const Row = styled.View`
@@ -66,6 +67,7 @@ export const LoginView: React.FC = () => {
               console.log('login is cancelled.');
             } else {
               console.log(result);
+              AccessToken.getCurrentAccessToken().then(token => console.log(token && token.userID));
               alert(`Login was successful with permissions: ${result.grantedPermissions}`);
             }
           }}
