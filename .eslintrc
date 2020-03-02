@@ -38,10 +38,5 @@
   },
   "globals": {
     "fetch": false
-  },
-  "settings": {
-    "import/resolver": {
-      "typescript": {}
-    }
   }
 }
