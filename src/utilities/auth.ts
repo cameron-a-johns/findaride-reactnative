@@ -17,5 +17,7 @@ export class Auth implements AuthProvider {
     }
   };
 
-  getAppId = () => { return config.}
+  getAppId = () => {
+    return config.clientId;
+  };
 }

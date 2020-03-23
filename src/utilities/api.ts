@@ -3,7 +3,7 @@ import axios, { AxiosInstance } from 'axios';
 import { AuthProvider } from './auth';
 
 const URLMAP = {
-  dev: 'http://192.168.1.141:4000/api/',
+  dev: 'http://192.168.1.193:4000/api/',
   prod: 'https://something.else.com/api/',
 };
 

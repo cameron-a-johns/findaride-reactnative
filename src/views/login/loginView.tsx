@@ -3,13 +3,24 @@ import styled from 'styled-components/native';
 import { View, Text, StyleSheet, Dimensions, Button } from 'react-native';
 import { LoginButton, AccessToken } from 'react-native-fbsdk';
 import { Icon } from 'react-native-elements';
+import { RouteComponentProps } from 'react-router-native';
 import { ThemeContext, RideApi, ApiContext, UserApi } from '../../utilities';
 
-export const LoginView: React.FC = () => {
+export const LoginView: React.FC<RouteComponentProps> = ({ history }: RouteComponentProps) => {
   const themeContext = useContext(ThemeContext);
   const rideApi = new RideApi(useContext(ApiContext));
   const userApi = new UserApi(useContext(ApiContext));
   const [temp, setTemp] = useState('');
+
+  const addUser = () => {
+    AccessToken.getCurrentAccessToken().then(token => {
+      userApi.addNewUser(token?.userID).then(result => {
+        if (result) {
+          history.push('/home');
+        }
+      });
+    });
+  };
 
   const Row = styled.View`
     display: flex;
@@ -67,8 +78,8 @@ export const LoginView: React.FC = () => {
               console.log('login is cancelled.');
             } else {
               console.log(result);
-              AccessToken.getCurrentAccessToken().then(token => console.log(token && token.userID));
-              alert(`Login was successful with permissions: ${result.grantedPermissions}`);
+              addUser();
+              console.log('finished');
             }
           }}
           onLogoutFinished={() => console.log('logout.')}
