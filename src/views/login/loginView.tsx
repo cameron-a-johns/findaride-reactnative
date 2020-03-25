@@ -1,14 +1,24 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components/native';
 import { View, Text, StyleSheet, Dimensions, Alert, Button } from 'react-native';
 import { LoginButton, AccessToken, LoginManager } from 'react-native-fbsdk';
 import { Icon } from 'react-native-elements';
 import { RouteComponentProps } from 'react-router-native';
-import { ThemeContext, ApiContext, UserApi } from '../../utilities';
+import { ThemeContext, ApiContext, UserApi, RouteTable } from '../../utilities';
 
 export const LoginView: React.FC<RouteComponentProps> = ({ history }: RouteComponentProps) => {
   const themeContext = useContext(ThemeContext);
   const userApi = new UserApi(useContext(ApiContext));
+
+  useEffect(() => {
+    AccessToken.getCurrentAccessToken().then(token => {
+      if (token) {
+        // TODO: check user exists, fast query
+        // TODO: load user profile, slow
+        history.push(RouteTable.home);
+      }
+    });
+  }, []);
 
   const addUser = () => {
     AccessToken.getCurrentAccessToken().then(token => {
