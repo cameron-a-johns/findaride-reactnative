@@ -13,7 +13,7 @@ export class UserApi {
   }
 
   addNewUser = (userId: string) => {
-    return this.api.request<boolean>('users', { method: 'POST', data: JSON.stringify(userId) });
+    return this.api.request<UserModel>('users', { method: 'POST', data: { userId } });
   };
 
   getUserProfile = async (user: string, historic = false) => {

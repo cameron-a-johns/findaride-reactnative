@@ -8,7 +8,7 @@ export interface RideBase {
 export interface RideDetail extends RideBase {
   attendees?: string[];
   speed: number;
-  startLocation: { lat: string, lon: string };
+  startLocation: { lat: string; lon: string };
   style: number;
   duration: number;
   notes?: string;

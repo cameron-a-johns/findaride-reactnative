@@ -34,7 +34,8 @@
       {
         "argsIgnorePattern": "^_"
       }
-    ]
+    ],
+    "no-underscore-dangle": "off"
   },
   "globals": {
     "fetch": false
