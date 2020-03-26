@@ -1,28 +1,12 @@
 import React from 'react';
-import { Route, NativeRouter, Switch, withRouter } from 'react-router-native';
-import { View } from 'react-native';
-import App from '../../App';
+import { Route, withRouter } from 'react-router-native';
 import { LoginView, HomeView } from '../views';
-import { ThemeProvider, ApiContext, ApiClient, Auth } from '../utilities';
 
-const authProvider = new Auth();
-authProvider.idp = 'facebook'; // TODO: remove hard coded idp
-const client = new ApiClient('dev', authProvider);
-
-export const routes = () => {
+export const Routes = () => {
   return (
-    <ThemeProvider>
-      <ApiContext.Provider value={client}>
-        <NativeRouter>
-          <View>
-            <Switch>
-              <Route path="/app" component={App} />
-              <Route path="/home" component={HomeView} />
-              <Route path="/" component={withRouter(LoginView)} />
-            </Switch>
-          </View>
-        </NativeRouter>
-      </ApiContext.Provider>
-    </ThemeProvider>
+    <>
+      <Route path="/home" component={HomeView} />
+      <Route path="/" component={withRouter(LoginView)} />
+    </>
   );
 };

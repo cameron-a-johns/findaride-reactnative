@@ -15,13 +15,23 @@ interface RequestConfig {
 }
 
 export class ApiClient {
+  private static instance: ApiClient;
+
   private axiosClient: AxiosInstance;
 
   private authProvider: AuthProvider;
 
-  constructor(env: keyof typeof URLMAP, authProvider: AuthProvider) {
+  private constructor(env: keyof typeof URLMAP, authProvider: AuthProvider) {
     this.axiosClient = axios.create({ baseURL: URLMAP[env] });
     this.authProvider = authProvider;
+  }
+
+  static getInstance(env?: keyof typeof URLMAP, authProvider?: AuthProvider) {
+    if (!ApiClient.instance && env && authProvider) {
+      this.instance = new ApiClient(env, authProvider);
+    }
+
+    return this.instance;
   }
 
   request = async <T>(path: string, config?: RequestConfig): Promise<T> => {

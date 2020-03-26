@@ -1,5 +1,10 @@
 import { ApiBaseResult } from './api.model';
 
-export interface UserModel extends ApiBaseResult {
+export interface ApiUserModel extends ApiBaseResult {
   message: { userId: string };
+}
+
+export interface UserModel {
+  name: string;
+  username: string;
 }

@@ -1,5 +1,5 @@
 import { ApiClient } from './api';
-import { UserModel } from '../models';
+import { ApiUserModel } from '../models';
 
 export class UserApi {
   private api: ApiClient;
@@ -13,10 +13,14 @@ export class UserApi {
   }
 
   addNewUser = (userId: string) => {
-    return this.api.request<UserModel>('users', { method: 'POST', data: { userId } });
+    return this.api.request<ApiUserModel>('users', { method: 'POST', data: { userId } });
+  };
+
+  checkUser = (userId: string) => {
+    return this.api.request<ApiUserModel>(`users/${userId}`);
   };
 
   getUserProfile = async (user: string, historic = false) => {
-    return this.api.request<UserModel>(`users?${historic ? 'historic' : ''}`, { data: JSON.stringify(user) });
+    return this.api.request<ApiUserModel>(`users?${historic ? 'historic' : ''}`, { data: JSON.stringify(user) });
   };
 }
