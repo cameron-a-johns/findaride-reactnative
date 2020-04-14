@@ -1,17 +1,18 @@
 import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components/native';
-import { View, Text, StyleSheet, Dimensions, Alert, Button } from 'react-native';
-import { LoginButton, AccessToken, LoginManager } from 'react-native-fbsdk';
-import { Icon } from 'react-native-elements';
+import { StyleSheet, Dimensions, Alert } from 'react-native';
+import { Icon, Button } from 'react-native-elements';
 import { RouteComponentProps } from 'react-router-native';
-import { ThemeContext, ApiContext, UserApi, RouteTable } from '../../utilities';
+import LinearGradient from 'react-native-linear-gradient';
+import { ThemeContext, ApiContext, UserApi, RouteTable, Auth } from '../../utilities';
 
 export const LoginView: React.FC<RouteComponentProps> = ({ history }: RouteComponentProps) => {
   const themeContext = useContext(ThemeContext);
   const userApi = new UserApi(useContext(ApiContext));
+  const auth = Auth.getInstance();
 
   useEffect(() => {
-    AccessToken.getCurrentAccessToken().then(token => {
+    auth.getToken().then(token => {
       if (token) {
         // TODO: check user exists, fast query
         // TODO: load user profile, slow
@@ -21,10 +22,10 @@ export const LoginView: React.FC<RouteComponentProps> = ({ history }: RouteCompo
   }, []);
 
   const addUser = () => {
-    AccessToken.getCurrentAccessToken().then(token => {
-      if (token) {
+    auth.getUserId().then(userId => {
+      if (userId) {
         userApi
-          .addNewUser(token.userID)
+          .addNewUser(userId)
           .then(result => {
             console.log(result);
             if (!result.isErr) {
@@ -36,10 +37,11 @@ export const LoginView: React.FC<RouteComponentProps> = ({ history }: RouteCompo
     });
   };
 
-  const handleFacebookLogin = () => {
-    LoginManager.logInWithPermissions(['public_profile', 'email'])
+  const handleLogin = () => {
+    auth
+      .login()
       .then(result => {
-        if (!result.isCancelled) {
+        if (result) {
           addUser();
         }
       })
@@ -48,66 +50,66 @@ export const LoginView: React.FC<RouteComponentProps> = ({ history }: RouteCompo
       });
   };
 
+  const Wrapper = styled.View`
+    background-color: ${themeContext?.colors.background};
+    height: 100%;
+  `;
+
   const Row = styled.View`
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: ${themeContext?.colors.background};
+    flex-direction: row;
   `;
 
   const HeaderWrapper = styled.View`
-    flex-direction: column;
-    justify-content: center;
+    flex-direction: row;
+    justify-content: flex-end;
     align-items: center;
+    width: 100%;
+    margin: 10px;
+  `;
+
+  const LoginWrapper = styled.View`
+    width: ${Dimensions.get('window').width * 0.7};
+    margin: 0 auto;
   `;
 
   const styles = StyleSheet.create({
-    wrapper: {
-      display: 'flex',
-      flexDirection: 'column',
-    },
     row: {
       height: Dimensions.get('window').height / 2,
       flexDirection: 'row',
       justifyContent: 'center',
       alignItems: 'center',
     },
-    icon: {
-      height: 150,
-    },
-    login: {
-      color: themeContext?.colors.primary,
-      textTransform: 'uppercase',
-    },
   });
 
   return (
     <>
-      <View style={styles.wrapper}>
+      <Wrapper>
         <Row>
           <HeaderWrapper>
-            <Icon name="theme-light-dark" type="material-community" size={150} onPress={() => themeContext?.swap()} />
-            <Text style={styles.login}>Login</Text>
+            <Icon name="theme-light-dark" type="material-community" onPress={() => themeContext?.swap()} />
           </HeaderWrapper>
         </Row>
-        <Button onPress={() => handleFacebookLogin()} title="Continue with Facebook" color="#3B5998" />
-        <LoginButton
-          permissions={['public_profile']}
-          onLoginFinished={(error, result) => {
-            console.log('login finished');
-            if (error) {
-              console.log(`login has error: ${result.error}`);
-            } else if (result.isCancelled) {
-              console.log('login is cancelled.');
-            } else {
-              console.log(result);
-              addUser();
-              console.log('finished');
-            }
-          }}
-          onLogoutFinished={() => console.log('logout.')}
-        />
-      </View>
+        <Row style={styles.row}>
+          <Icon name="bike" type="material-community" color={themeContext?.colors.primary} size={100} />
+          <Icon name="plus" type="material-community" />
+          <Icon name="account-group" type="material-community" color={themeContext?.colors.primary} size={100} />
+        </Row>
+        <LoginWrapper>
+          <Button
+            style={{ width: '110px' }}
+            onPress={() => handleLogin()}
+            title="Continue with Facebook"
+            icon={<Icon name="facebook" type="material-community" color="white" size={20} />}
+            ViewComponent={LinearGradient}
+            linearGradientProps={{
+              colors: ['#4c669f', '#3b5998', '#192f6a'],
+            }}
+          />
+        </LoginWrapper>
+      </Wrapper>
     </>
   );
 };

@@ -1,14 +1,14 @@
 import React from 'react';
-import { NativeRouter, Switch } from 'react-router-native';
+import { NativeRouter } from 'react-router-native';
 import { View } from 'react-native';
 import { Provider } from 'react-redux';
 import { ThemeProvider, ApiContext, ApiClient, Auth } from '../utilities';
 import { store } from '../store';
 import { Routes } from './routes';
+import { Navigation } from '../components/navigation';
 
-const authProvider = new Auth();
-authProvider.idp = 'facebook'; // TODO: remove hard coded idp
-const client = ApiClient.getInstance('dev', authProvider);
+const authProvider = Auth.getInstance('facebook'); // TODO: remove hard coded idp
+const client = new ApiClient('dev', authProvider);
 
 export const App = () => {
   return (
@@ -17,9 +17,8 @@ export const App = () => {
         <Provider store={store}>
           <NativeRouter>
             <View>
-              <Switch>
-                <Routes />
-              </Switch>
+              <Routes />
+              <Navigation />
             </View>
           </NativeRouter>
         </Provider>
