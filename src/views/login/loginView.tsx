@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components/native';
 import { StyleSheet, Dimensions, Alert } from 'react-native';
 import { Icon, Button } from 'react-native-elements';
-import { RouteComponentProps } from 'react-router-native';
+import { RouteComponentProps } from 'react-router';
 import LinearGradient from 'react-native-linear-gradient';
 import { ThemeContext, ApiContext, UserApi, RouteTable, Auth } from '../../utilities';
 
@@ -12,17 +12,18 @@ export const LoginView: React.FC<RouteComponentProps> = ({ history }: RouteCompo
   const auth = Auth.getInstance();
 
   useEffect(() => {
-    auth.getToken().then(token => {
-      if (token) {
-        // TODO: check user exists, fast query
-        // TODO: load user profile, slow
-        history.push(RouteTable.home);
-      }
-    });
+    auth &&
+      auth.getToken().then(token => {
+        if (token) {
+          // TODO: check user exists, fast query
+          // TODO: load user profile, slow
+          history.push(RouteTable.home);
+        }
+      });
   }, []);
 
-  const addUser = () => {
-    auth.getUserId().then(userId => {
+  const addUser = (newAuth: Auth) => {
+    newAuth.getUserId().then(userId => {
       if (userId) {
         userApi
           .addNewUser(userId)
@@ -38,16 +39,18 @@ export const LoginView: React.FC<RouteComponentProps> = ({ history }: RouteCompo
   };
 
   const handleLogin = () => {
-    auth
-      .login()
-      .then(result => {
-        if (result) {
-          addUser();
-        }
-      })
-      .catch(error => {
-        Alert.alert('Error logging in', error);
-      });
+    const newAuth = Auth.getInstance('facebook');
+    newAuth &&
+      newAuth
+        .login()
+        .then(result => {
+          if (result) {
+            addUser(newAuth);
+          }
+        })
+        .catch(error => {
+          Alert.alert('Error logging in', error);
+        });
   };
 
   const Wrapper = styled.View`

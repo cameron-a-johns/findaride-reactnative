@@ -1,13 +1,13 @@
 import React from 'react';
 import { View, Text, Button, Dimensions } from 'react-native';
-import { RouteComponentProps } from 'react-router-native';
+import { RouteComponentProps } from 'react-router';
 import { Auth } from '../../utilities';
 
 export const HomeView: React.FC<RouteComponentProps> = ({ history }: RouteComponentProps) => {
   const auth = Auth.getInstance();
 
   const handleLogout = () => {
-    auth.logout();
+    auth && auth.logout();
     history.push('/');
   };
 

@@ -1,12 +1,24 @@
 import { AccessToken, LoginManager } from 'react-native-fbsdk';
+import SyncStorage from 'sync-storage';
 import { config } from '../config/environment';
+import { StorageKeys } from './const';
 
-type idP = 'facebook' | undefined;
+export type idP = 'facebook' | undefined;
+
+const storedClient = () => {
+  try {
+    const val = SyncStorage.get(StorageKeys.idp) as idP;
+    return val ?? undefined;
+  } catch {
+    return undefined;
+  }
+};
 
 export interface AuthProvider {
   getToken: () => Promise<string | undefined>;
   getAppId: () => string;
 }
+
 export class Auth implements AuthProvider {
   private static _instance: Auth;
 
@@ -19,11 +31,15 @@ export class Auth implements AuthProvider {
   static getInstance(idp?: idP) {
     if (!this._instance) {
       if (!idp) {
-        throw new Error('Auth not instantiated and no IdP provided');
+        const storedIdp = storedClient();
+        if (storedIdp) {
+          this._instance = new Auth(storedIdp);
+          return this._instance;
+        }
+        return undefined;
       }
       this._instance = new Auth(idp);
     }
-
     return this._instance;
   }
 

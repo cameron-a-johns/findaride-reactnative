@@ -1,6 +1,6 @@
 import React from 'react';
 import axios, { AxiosInstance } from 'axios';
-import { AuthProvider } from './auth';
+import { Auth } from './auth';
 
 const URLMAP = {
   dev: 'http://192.168.1.141:4000/api/',
@@ -17,19 +17,22 @@ interface RequestConfig {
 export class ApiClient {
   private axiosClient: AxiosInstance;
 
-  private authProvider: AuthProvider;
-
-  constructor(env: keyof typeof URLMAP, authProvider: AuthProvider) {
+  constructor(env: keyof typeof URLMAP) {
     this.axiosClient = axios.create({ baseURL: URLMAP[env] });
-    this.authProvider = authProvider;
   }
 
   request = async <T>(path: string, config?: RequestConfig): Promise<T> => {
+    const auth = Auth.getInstance();
+
+    if (!auth) {
+      throw new Error('Auth Client issue');
+    }
+
     try {
       const result = await this.axiosClient.request<T>({
         url: path,
         method: config?.method,
-        headers: { ...config?.headers, 'x-api-key': await this.authProvider.getAppId() },
+        headers: { ...config?.headers, 'x-api-key': await auth.getAppId() },
         data: config?.data,
       });
       return result.data;
@@ -39,14 +42,20 @@ export class ApiClient {
   };
 
   authenticatedRequest = async <T>(path: string, config?: RequestConfig): Promise<T> => {
+    const auth = Auth.getInstance();
+
+    if (!auth) {
+      throw new Error('Auth Client issue');
+    }
+
     try {
       const result = await this.axiosClient.request<T>({
         url: path,
         method: config?.method,
         headers: {
           ...config?.headers,
-          Authorization: await this.authProvider.getToken(),
-          'x-api-key': await this.authProvider.getAppId(),
+          Authorization: await auth.getToken(),
+          'x-api-key': await auth.getAppId(),
         },
         data: config?.data,
       });

@@ -1,28 +1,27 @@
 import React from 'react';
-import { NativeRouter } from 'react-router-native';
+import { ConnectedRouter } from 'connected-react-router';
 import { View } from 'react-native';
 import { Provider } from 'react-redux';
-import { ThemeProvider, ApiContext, ApiClient, Auth } from '../utilities';
-import { store } from '../store';
+import { ThemeProvider, ApiContext, ApiClient } from '../utilities';
+import { store, history } from '../store';
 import { Routes } from './routes';
 import { Navigation } from '../components/navigation';
 
-const authProvider = Auth.getInstance('facebook'); // TODO: remove hard coded idp
-const client = new ApiClient('dev', authProvider);
+const client = new ApiClient('dev');
 
 export const App = () => {
   return (
-    <ThemeProvider>
-      <ApiContext.Provider value={client}>
-        <Provider store={store}>
-          <NativeRouter>
+    <ApiContext.Provider value={client}>
+      <Provider store={store}>
+        <ConnectedRouter history={history}>
+          <ThemeProvider>
             <View>
               <Routes />
               <Navigation />
             </View>
-          </NativeRouter>
-        </Provider>
-      </ApiContext.Provider>
-    </ThemeProvider>
+          </ThemeProvider>
+        </ConnectedRouter>
+      </Provider>
+    </ApiContext.Provider>
   );
 };

@@ -1,12 +1,13 @@
 import React from 'react';
-import { Route, withRouter, Switch } from 'react-router-native';
+import { Route, Switch } from 'react-router';
 import { LoginView, HomeView } from '../views';
+import { ProtectedRoute } from '../components/protectedRoute';
 
 export const Routes = () => {
   return (
     <Switch>
-      <Route path="/home" component={HomeView} />
-      <Route path="/" component={withRouter(LoginView)} />
+      <ProtectedRoute path="/home" component={HomeView} />
+      <Route path="/" component={LoginView} />
     </Switch>
   );
 };
