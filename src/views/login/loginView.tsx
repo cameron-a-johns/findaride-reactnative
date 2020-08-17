@@ -1,10 +1,11 @@
 import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components/native';
-import { StyleSheet, Dimensions, Alert } from 'react-native';
+import { Dimensions, Alert } from 'react-native';
 import { Icon, Button } from 'react-native-elements';
 import { RouteComponentProps } from 'react-router';
 import LinearGradient from 'react-native-linear-gradient';
 import { ThemeContext, ApiContext, UserApi, RouteTable, Auth } from '../../utilities';
+import { LocalStorage } from '../../Services/localStorage';
 
 export const LoginView: React.FC<RouteComponentProps> = ({ history }: RouteComponentProps) => {
   const themeContext = useContext(ThemeContext);
@@ -25,10 +26,10 @@ export const LoginView: React.FC<RouteComponentProps> = ({ history }: RouteCompo
   const addUser = (newAuth: Auth) => {
     newAuth.getUserId().then(userId => {
       if (userId) {
+        LocalStorage.Set('user', userId);
         userApi
           .addNewUser(userId)
           .then(result => {
-            console.log(result);
             if (!result.isErr) {
               history.push('/home');
             }
@@ -74,18 +75,9 @@ export const LoginView: React.FC<RouteComponentProps> = ({ history }: RouteCompo
   `;
 
   const LoginWrapper = styled.View`
-    width: ${Dimensions.get('window').width * 0.7};
+    width: ${Dimensions.get('window').width * 0.7}px;
     margin: 0 auto;
   `;
-
-  const styles = StyleSheet.create({
-    row: {
-      height: Dimensions.get('window').height / 2,
-      flexDirection: 'row',
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-  });
 
   return (
     <>
@@ -95,7 +87,7 @@ export const LoginView: React.FC<RouteComponentProps> = ({ history }: RouteCompo
             <Icon name="theme-light-dark" type="material-community" onPress={() => themeContext?.swap()} />
           </HeaderWrapper>
         </Row>
-        <Row style={styles.row}>
+        <Row>
           <Icon name="bike" type="material-community" color={themeContext?.colors.primary} size={100} />
           <Icon name="plus" type="material-community" />
           <Icon name="account-group" type="material-community" color={themeContext?.colors.primary} size={100} />

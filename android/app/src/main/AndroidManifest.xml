@@ -2,6 +2,7 @@
   package="com.findaridestarter">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
       android:name=".MainApplication"
@@ -11,6 +12,9 @@
       android:allowBackup="false"
       android:theme="@style/AppTheme"
       android:hardwareAccelerated="false">
+      <meta-data
+        android:name="com.google.android.geo.API_KEY"
+        android:value="AIzaSyBta6xi1DRZM7mAn5vil0v6npuRdzWluW0"/>
       <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
       <activity
         android:name=".MainActivity"

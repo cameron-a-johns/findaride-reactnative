@@ -6,6 +6,7 @@ import { ThemeProvider, ApiContext, ApiClient } from '../utilities';
 import { store, history } from '../store';
 import { Routes } from './routes';
 import { Navigation } from '../components/navigation';
+import { UserContext } from '../Context/user.context';
 
 const client = new ApiClient('dev');
 
@@ -15,10 +16,12 @@ export const App = () => {
       <Provider store={store}>
         <ConnectedRouter history={history}>
           <ThemeProvider>
-            <View>
-              <Routes />
-              <Navigation />
-            </View>
+            <UserContext>
+              <View>
+                <Routes />
+                <Navigation />
+              </View>
+            </UserContext>
           </ThemeProvider>
         </ConnectedRouter>
       </Provider>

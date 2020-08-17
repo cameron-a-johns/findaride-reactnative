@@ -20,9 +20,12 @@
         "extensions": [".jsx", ".tsx"]
       }
     ],
-    "no-param-reassign": ["error", {
-      "props": false
-    }],
+    "no-param-reassign": [
+      "error",
+      {
+        "props": false
+      }
+    ],
     "@typescript-eslint/explicit-function-return-type": "off",
     "no-unused-expressions": [
       "warn",
@@ -38,7 +41,8 @@
         "argsIgnorePattern": "^_"
       }
     ],
-    "no-underscore-dangle": "off"
+    "no-underscore-dangle": "off",
+    "react/prop-types": "off"
   },
   "globals": {
     "fetch": false

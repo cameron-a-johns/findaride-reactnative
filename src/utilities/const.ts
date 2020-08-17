@@ -4,4 +4,5 @@ export const RouteTable = {
 
 export const StorageKeys = {
   idp: '@IDP',
+  user: 'user/token',
 };

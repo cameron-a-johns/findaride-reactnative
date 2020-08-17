@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components/native';
 import { Dimensions } from 'react-native';
 
 const NavWrapper = styled.View`
   position: absolute;
   bottom: 0;
-  width: ${Dimensions.get('window').width}
+  width: ${Dimensions.get('window').width}px;
   height: 90px;
   background-color: red;
   display: flex;
@@ -16,7 +16,7 @@ const NavWrapper = styled.View`
 `;
 
 const NavItem = styled.View`
-  min-width: ${Dimensions.get('window').width / 5};
+  min-width: ${Dimensions.get('window').width / 5}px;
 
   &:not(:last-child) {
     border-right: 1px solid black;
