@@ -29,12 +29,24 @@ export const HomeView: React.FC<RouteComponentProps> = ({ history }: RouteCompon
         buttonNegative: 'Cancel',
         buttonPositive: 'OK',
       });
+      const granted2 = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION, {
+        title: 'Grant access to your location',
+        message: 'FindARide needs access to your location so you can find rides close to you.',
+        buttonNeutral: 'Ask Me Later',
+        buttonNegative: 'Cancel',
+        buttonPositive: 'OK',
+      });
+      console.log(granted2);
       setLocationAllowed(granted === PermissionsAndroid.RESULTS.GRANTED);
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        Geolocation.getCurrentPosition(pos => {
-          console.log(pos.coords);
-          setCurrentPos({ ...currentPos, latitude: pos.coords.latitude, longitude: pos.coords.longitude });
-        });
+        Geolocation.getCurrentPosition(
+          pos => {
+            console.log(pos);
+            setCurrentPos({ ...currentPos, latitude: pos.coords.latitude, longitude: pos.coords.longitude });
+          },
+          error => console.log(error),
+          { enableHighAccuracy: true },
+        );
       }
     } catch (err) {
       console.warn(err);
