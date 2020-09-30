@@ -23,14 +23,14 @@ export class AuthService {
 
   constructor(idp?: IDPType) {
     if (idp) {
-      this._idp = IDPMapper[idp]();
-      SyncStorage.set(StorageKeys.idp, idp);
+      this.setIdp(idp);
       return;
     }
 
     const stored = storedClient();
     if (stored) {
       this._idp = IDPMapper[stored]();
+      SyncStorage.set(StorageKeys.idp, idp);
     }
   }
 
@@ -38,7 +38,10 @@ export class AuthService {
     this._idp = IDPMapper[idp]();
   }
 
-  clearIdp = () => this._idp = undefined;
+  clearIdp = () => {
+    this._idp = undefined;
+    SyncStorage.clear(StorageKeys.idp);
+  }
 
   getToken = () => {
     return resolveOrFallback(this._idp?.getToken(), undefined);
