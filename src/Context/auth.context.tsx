@@ -1,40 +1,33 @@
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { SyncStorage } from 'sync-storage';
-import { AuthService, IDPType, StorageKeys } from '../utilities';
+import { AuthService, IDPType } from '../services/auth';
+import { StorageKeys } from '../utilities';
 import { Context } from './helper';
 
 interface AuthStore {
-    client?: AuthService;
-    setIdp: (idp: IDPType) => void;
+    login: (idp: IDPType) => Promise<boolean>;
+    logout: () => void;
 }
-
-const storedClient = () => {
-    try {
-      const val = SyncStorage.get(StorageKeys.idp) as IDPType;
-      return val ?? undefined;
-    } catch {
-      return undefined;
-    }
-  };
 
 const [useAuth, AuthProvider] = Context.create<AuthStore>();
 
 const AuthContext: React.FC = ({children}) => {
-    const authService = useRef<AuthService | undefined>(undefined);
-
-    useEffect(() => {
-        const stored = storedClient();
-
-        if (stored) {
-            authService.current = new AuthService(stored);
-        }
-    }, [storedClient]);
+    const authService = useRef<AuthService>(new AuthService());
 
     return <AuthProvider value={{
-        client: authService.current,
-        setIdp: (idp: IDPType) => {
+        login: (idp: IDPType) => {
             SyncStorage.set(StorageKeys.idp, idp);
-            authService.current = new AuthService(idp);
+            
+            authService.current.setIdp(idp);
+            return authService.current.login();
+        },
+        logout: async () => {
+            if (await authService.current.logout()) {
+                SyncStorage.clear(StorageKeys.idp);
+                authService.current.clearIdp();
+            }
         }
     }}>{children}</AuthProvider>
 }
+
+export { AuthContext, useAuth };

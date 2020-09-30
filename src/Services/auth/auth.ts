@@ -1,9 +1,7 @@
-import { AccessToken, LoginManager } from 'react-native-fbsdk';
 import SyncStorage from 'sync-storage';
 import { config } from '../../config/environment';
-import { StorageKeys } from '../../utilities/const';
-import { FacebookIdp } from './providers/Facebook';
-import { Idp } from './providers/Idp';
+import { resolveOrFallback, StorageKeys } from '../../utilities';
+import { FacebookIdp, Idp } from './providers';
 
 const IDPMapper = {
   facebook: () => new FacebookIdp(),
@@ -40,8 +38,10 @@ export class AuthService {
     this._idp = IDPMapper[idp]();
   }
 
+  clearIdp = () => this._idp = undefined;
+
   getToken = () => {
-    return this._idp?.getToken();
+    return resolveOrFallback(this._idp?.getToken(), undefined);
   };
 
   getAppId = () => {
@@ -49,14 +49,14 @@ export class AuthService {
   };
 
   logout = () => {
-    return this._idp.logout();
+    return resolveOrFallback(this._idp?.logout(), false);
   };
 
   login = (): Promise<boolean> => {
-    return this._idp.login();
+    return resolveOrFallback(this._idp?.login(), false);
   };
 
   getUserId = () => {
-    return this._idp.getUserId();
+    return resolveOrFallback(this._idp?.getUserId(), undefined);
   };
 }
